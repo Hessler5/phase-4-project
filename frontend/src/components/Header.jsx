@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import { NavLink, Navigate } from "react-router-dom";
 import { useUser } from "../UserContext";
-
+import { useNavigate } from "react-router-dom";
 
 
 function Header(){
 
     const {user, setUser} = useUser()
-
-    const [loggedOut, setLoggedOut] = useState(false)
 
 
     // Will likely have to move logout function to Login or Home
@@ -22,8 +20,6 @@ function Header(){
                 console.log(user)
                 if (res.ok) {
                     setUser(null);
-                    setLoggedOut(true);
-                    console.log(loggedOut);
                 } else {
                     throw new Error("Logout failed");
                 }
@@ -31,14 +27,13 @@ function Header(){
             .catch((error) => {
                 console.error("Logout error:", error);
             });
-    
-        if (loggedOut){ 
-            return <Navigate to='/' />};
     }
     
     
 
-    return(
+    return(<>
+    {user ? (        
+    
         <div className="header-div">
             <div className = {"nav_user_info"}>
                 <img className={"nav_img"} src = {user.profile_picture}/>
@@ -59,21 +54,12 @@ function Header(){
                     <button onClick={logout}>Logout</button>
                 </NavLink>
             </div>
-        
-            {/* if the user is signed in, below button should be "Profile" but otherwise should be "Sign In". We also need to redirect them to either the signin page or the profile depending on the button*/}
-            {/* {isLoggedIn ? 
-                (
-                <NavLink to='/Profile'>
-                    <button>Profile</button>
-                </NavLink>
-                ) : (
-                <NavLink to='/'>
-                    <button>Login</button>
-                </NavLink>
-                )
-            } */}
-        
         </div>
+        )
+        :(<Navigate to='/' />)}
+    </>
+        
+
     );
 };
 
