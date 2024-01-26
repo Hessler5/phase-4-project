@@ -17,7 +17,10 @@ function Home() {
 
     useEffect(() => {
         //fetches all memes for the user
-        fetch(`/api/memes/${user.id}`).then(resp => resp.json()).then(data => setUserMemes(data))
+        if(user){
+            fetch(`/api/memes/${user.id}`).then(resp => resp.json()).then(data => setUserMemes(data))
+        }
+        
     }, [])
 
      //handles patching memes
@@ -62,7 +65,7 @@ function Home() {
     const [newMeme, setNewMeme] = useState({
         "img_url" : "",
         "description" : "",
-        "user_id" : user.id
+        "user_id" : user?.id
     })
 
     function handleNewMemeInputs(e) {
